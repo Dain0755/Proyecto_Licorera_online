@@ -5,6 +5,13 @@ from django.http import HttpResponse
 from Contacto.models import Contactos
 from inventario.models import Productos
 from shop.views import shoop
+import smtplib
+from email.message import EmailMessage
+messageCliente='hola recibiste este correo ya que compraste un producto en licotapetusa: '
+messageAdmin='Admin una compra fué realizada por: '
+subject="Compra en Lico tapetusa"
+message="subject : {}\n\n{}".format(subject,messageCliente)
+messageAdmin="subject : {}\n\n{}".format(subject,messageAdmin)
 
 # Create your views here.
 
@@ -28,6 +35,13 @@ def Enviar_datos(request):
         nombre_pro = request.POST["nombre_producto"]
         data = Contactos(name=nombre_apellido, id=id, email= correo, adress=Direccion, local=departamento, city=ciudad, cellphone=telefono, cost=costo, product_name=nombre_pro )
         data.save()
+        correoAdmin = 'pepetoo123321@gmail.com'
+        server1=smtplib.SMTP('smtp.gmail.com','587')
+        server1.starttls()
+        server1.login('pepetoo123321@gmail.com','pepeto123456')
+        server1.sendmail('pepetoo123321@gmail.com',correo,messageCliente,nombre_pro, costo)  
+        server1.sendmail('pepetoo123321@gmail.com',correoAdmin,messageAdmin,nombre_pro, costo)                        
+        print("se envio el correo ")
 
         return redirect('/shop/')
     
